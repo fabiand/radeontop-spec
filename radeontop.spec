@@ -30,11 +30,13 @@ Supported cards are R600 and up.
 %build
 # configure doesn't exist, but we need the exported CFLAGS and friends
 %configure || :
-make %{?_smp_mflags} PREFIX=%{_prefix}
 
 
 %install
-make install PREFIX=%{_prefix} DESTDIR=%{buildroot}
+# plain=1 prevents stripping
+# CC="..." to also pass -g
+# Upstream patch: https://github.com/clbr/radeontop/pull/8
+make install %{?_smp_mflags} PREFIX=%{_prefix} DESTDIR=%{buildroot} plain=1 CC="gcc -g"
 %find_lang %{name}
 
 
