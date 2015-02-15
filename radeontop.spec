@@ -1,11 +1,11 @@
-%global commit eadc100956fb5e346a4c5726453efd15fb2ec9f7
+%global commit 281462c0943486170ef7b2451d1c3c38268c3484
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-%global checkout .20140421git%{shortcommit}
+%global checkout .20150215git%{shortcommit}
 
 Summary:    View GPU utilization off AMD/ATI Radeon devices
 Name:       radeontop
-Version:    0.7
-Release:    2%{?checkout}%{?dist}
+Version:    0.8
+Release:    1%{?checkout}%{?dist}
 License:    GPLv3
 Group:      System Environment/Libraries
 URL:        https://github.com/clbr/%{name}
@@ -49,6 +49,9 @@ make install PREFIX=%{_prefix} DESTDIR=%{buildroot}
 
 
 %changelog
+* Sun Feb 15 2015 Fabian Deutsch <fabiand@fedoraproject.org> - 0.8-1.git20150215.281462c
+- Update to upstream 0.8
+
 * Thu Apr 24 2014 Fabian Deutsch <fabiand@fedoraproject.org> - 0.7-2.git20140421.eadc100
 - Fix commit position, BuildRequirements, build, and man page inclusion (thanks mschwendt)
 
