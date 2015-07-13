@@ -1,16 +1,15 @@
-%global commit 281462c0943486170ef7b2451d1c3c38268c3484
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-%global checkout .20150215git%{shortcommit}
+%global commit0 281462c0943486170ef7b2451d1c3c38268c3484
+%global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
+%global checkout .20150215git%{shortcommit0}
 
-Summary:    View GPU utilization off AMD/ATI Radeon devices
+Summary:    View GPU utilization of AMD/ATI Radeon devices
 Name:       radeontop
 Version:    0.8
-Release:    1%{?checkout}%{?dist}
+Release:    2%{?checkout}%{?dist}
 License:    GPLv3
-Group:      System Environment/Libraries
 URL:        https://github.com/clbr/%{name}
 
-Source0:    %{url}/archive/%{commit}/%{name}-%{version}-%{shortcommit}.tar.gz
+Source0:    %{url}/archive/%{commit0}.tar.gz#/%{name}-%{shortcommit0}.tar.gz
 
 BuildRequires: asciidoc gettext
 BuildRequires: pkgconfig(ncurses)
@@ -24,12 +23,14 @@ Supported cards are R600 and up.
 
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -qn %{name}-%{commit0}
 
 
 %build
 # configure doesn't exist, but we need the exported CFLAGS and friends
 %configure || :
+
+sed -i "s/install: all/install:/" Makefile
 
 # plain=1 prevents stripping
 # CC="..." to also pass -g
@@ -38,17 +39,24 @@ make all %{?_smp_mflags} PREFIX=%{_prefix} plain=1 CC="gcc -g"
 
 
 %install
-make install PREFIX=%{_prefix} DESTDIR=%{buildroot}
+make install DESTDIR=%{buildroot} PREFIX=%{_prefix}
 %find_lang %{name}
 
 
 %files -f %{name}.lang
-%doc README.md TODO COPYING
+%license COPYING
+%doc README.md TODO
 %{_sbindir}/radeontop
 %{_mandir}/man1/radeontop.1*
 
 
 %changelog
+* Mon Jul 13 2015 Fabian Deutsch <fabiand@fedoraproject.org> - 0.8-2.git20150215.281462c
+- Drop the Group
+- Fix a spelling mistake
+- Fix recompilation
+- Use license for COPYING
+
 * Sun Feb 15 2015 Fabian Deutsch <fabiand@fedoraproject.org> - 0.8-1.git20150215.281462c
 - Update to upstream 0.8
 
